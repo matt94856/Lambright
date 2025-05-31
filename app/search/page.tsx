@@ -1,14 +1,15 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useSearchParams } from 'next/navigation';
-import Layout from '@/components/layout/Layout';
-import ProductCard from '@/components/product/ProductCard';
-import { products } from '@/data/products';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Layout from "@/components/layout/Layout";
+import ProductCard from "@/components/product/ProductCard";
+import { products } from "@/data/products";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
+  const query = searchParams.get("q") || "";
 
   const filteredProducts = products.filter(
     (product) =>
@@ -23,7 +24,6 @@ export default function SearchPage() {
         <h1 className="text-3xl font-bold mb-8">
           Search Results for "{query}"
         </h1>
-
         {filteredProducts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 mb-4">
@@ -47,5 +47,13 @@ export default function SearchPage() {
         )}
       </div>
     </Layout>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense>
+      <SearchPageContent />
+    </Suspense>
   );
 } 
